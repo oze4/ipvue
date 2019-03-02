@@ -3,17 +3,53 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title>vueip</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
+    <title>Vue IP Mapper</title>
+    <meta name="description" content="Geo-Map Public IP Addresses">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/img/vue.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons">
-  </head>
+    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/3.4.93/css/materialdesignicons.min.css">
+    <style>
+        [v-cloak] {
+            display: block;
+            padding: 50px 0;
+        }
+
+        @keyframes spinner {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        [v-cloak]:before {
+            content: "";
+            box-sizing: border-box;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin-top: -10px;
+            margin-left: -10px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            border-top-color: #333;
+            animation: spinner 0.6s linear infinite;
+            text-indent: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        [v-cloak]>* {
+            display: none;
+        }
+    </style>
+</head>
   <body>
     <noscript>
-      <strong>We're sorry but vueip doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong>We're sorry but IPVue doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <div id="app"></div>
+    <div id="root"></div>
     <!-- built files will be auto injected -->
   </body>
 </html>
