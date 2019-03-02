@@ -53,7 +53,7 @@ export default {
     data() {
         return {
             message: {
-                header: "Welcome to v-ipmapper!",
+                header: "Welcome to IPVue!",
                 subHeader: "MAP PUBLIC IP ADDRESSES",
                 author: "Made by Matthew Oestreich"
             },
