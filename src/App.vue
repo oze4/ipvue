@@ -14,11 +14,6 @@ import Snackbar from './components/Snackbar.vue';
 import Topbar from './components/Topbar.vue';
 import MapForm from './components/MapForm.vue';
 
-/*if (location.protocol === "https:") {
-    Cookies.set('____vipmapperredirection____', 'true', 1);
-    location.replace("http://" + location.hostname);
-}*/
-
 export default {
     components: {
         Snackbar,
@@ -33,12 +28,18 @@ export default {
         this.handleResize();
     },
     mounted() {
-        setTimeout((vm) => {
-            if ((Cookies.get('____vipmapperredirection____')) === 'true') {
-                vm.isSnackbarShown = true;
-            }
-            Cookies.remove('____vipmapperredirection____');
-        }, 300, this);
+        if (location.protocol === "https:") {
+            Cookies.set('____vipmapperredirection____', 'true', 1);
+            location.replace("http://" + location.hostname);
+            return false;
+        } else {
+            setTimeout((vm) => {
+                if ((Cookies.get('____vipmapperredirection____')) === 'true') {
+                    vm.isSnackbarShown = true;
+                }
+                Cookies.remove('____vipmapperredirection____');
+            }, 300, this);
+        }
     },
     destroyed() {
         window.removeEventListener('resize', this.handleResize)
