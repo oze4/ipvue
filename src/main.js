@@ -4,11 +4,11 @@ import './plugins/leaflet.js'
 import App from './App.vue'
 import Cookies from './plugins/cookies.js'
 
-alert("window.location: "+window.location + " | location: "+ location);
 
 if (location.protocol === "https:") {
   Cookies.set('____vipmapperredirection____', 'true', 1);
-  location.replace("http://" + location.hostname);
+  //location.replace("http://" + location.hostname);
+  location.protocol.replace("https:", "http:");
 } else {
 
   Vue.config.productionTip = false
