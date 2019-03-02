@@ -1,6 +1,9 @@
 module.exports = {
-  publicPath: './',
+  publicPath: '',
   outputDir: './docs',
   assetsDir: 'assets',
-  productionSourceMap: false
+  productionSourceMap: false,
+  runtimeCompiler: undefined,
+  parallel: undefined,
+  css: undefined
 }
