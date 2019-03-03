@@ -109,7 +109,7 @@ export default {
             this.map.scrollWheelZoom.disable();
 
             L.control.zoom({
-                position: 'bottomright'
+                position: 'bottomleft'
             }).addTo(this.map);
 
             L.tileLayer(this.mapTileLayer, {
