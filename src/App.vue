@@ -9,16 +9,13 @@
 </template>
 
 <script>
-import Cookies from './plugins/cookies.js';
-import Snackbar from './components/Snackbar.vue';
-import Topbar from './components/Topbar.vue';
-import MapForm from './components/MapForm.vue';
+import * as Cookies from './plugins/cookies.js';
 
 export default {
     components: {
-        Snackbar,
-        Topbar,
-        MapForm,
+        Snackbar: () => import('./components/Snackbar.vue'),
+        Topbar: () => import('./components/Topbar.vue'),
+        MapForm: () => import('./components/MapForm.vue'),
     },
     beforeCreate() {
 

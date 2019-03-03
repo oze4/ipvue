@@ -58,15 +58,11 @@
 </template>
 
 <script>
-import ProviderSelect from './ProviderSelect.vue';
-import ToggleCurrentIp from './ToggleCurrentIp.vue';
-import GenerateMap from './GenerateMap.vue';
-
 export default {
     components: {
-        ToggleCurrentIp,
-        ProviderSelect,
-        GenerateMap,
+        ToggleCurrentIp: () => import('./ToggleCurrentIp.vue'),
+        ProviderSelect: () => import('./ProviderSelect.vue'),
+        GenerateMap: () => import('./GenerateMap.vue'),
     },
     data() {
         return {
