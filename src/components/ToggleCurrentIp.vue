@@ -1,8 +1,8 @@
 <template>
     <v-switch
         ref="toggler"
-        :height='height'
-        :label='label'
+        height=4
+        label='Use Current IP'
         v-model='state'
         @mouseup.stop
         @mousedown.stop
@@ -17,30 +17,19 @@ export default {
             default: false,
         },
     },
-    data() {
-        return {
-            label: 'Use Current IP',
-            height: 4,
-            fontSize: 11,
-        }
-    },
     computed: {
         state: {
-            get() {
-                return this.value;
-            },
-            set(state) {
-                this.$emit('input', state);
-            }
-        },
-        setToggleLabelTextSize() {
-            this.$refs.toggler.$el.querySelector('label').style.fontSize = this.fontSize + 'px';
-            return null;
+            get() { return this.value; },
+            set(state) { this.$emit('input', state); }
         },
     },
     mounted() {
-        this.setToggleLabelTextSize;
+        this.$refs
+            .toggler
+            .$el
+            .querySelector('label')
+            .style
+            .fontSize = 11 + 'px';
     },
-    methods: {}
 }
 </script>
