@@ -15,11 +15,17 @@ module.exports = {
       }])
     ],
   },
+
   publicPath: '',
   outputDir: './docs',
   assetsDir: 'assets',
   productionSourceMap: false,
   runtimeCompiler: undefined,
   parallel: undefined,
-  css: undefined
+  css: undefined,
+
+  pwa: {
+    name: 'IPVue',
+    msTileColor: '#4A90E2'
+  }
 }
