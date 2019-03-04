@@ -2,7 +2,7 @@ import Vue from 'vue'
 import './plugins/vuetify'
 import './plugins/leaflet.js'
 import App from './App.vue'
-import './registerServiceWorker'
+import './registerServiceWorker.js'
 
 Vue.config.productionTip = false
 
