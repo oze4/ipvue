@@ -123,7 +123,9 @@ export default {
             },
             set(value) {
                 this.map.show = value;
-                this.map.show && value ? this.map.key = Date.now() : this.map.show = false;
+                this.map.show && value 
+                    ? this.map.key = Date.now() 
+                    : this.map.show = false;
             }
         }
     },
