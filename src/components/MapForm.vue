@@ -8,15 +8,12 @@
                             <v-container>
                                 <v-layout justify-center wrap>
                                     <v-flex xs12 md4>
-                                        <provider-select 
-                                            v-model='selectedProvider' 
-                                            @cleared='resetForm'
-                                        ></provider-select>
+                                        <provider-select v-model='selectedProvider' @cleared='resetForm'></provider-select>
                                     </v-flex>
                                     <v-flex v-if="hostIpShow" xs12 md4>
                                         <v-text-field
                                             label='Hostname or IP'
-                                            v-model='map.options.host'
+                                            v-model='host'
                                             hide-details
                                             clearable
                                             required
@@ -29,7 +26,7 @@
                                     <v-flex v-if="apiKeyShow" xs12 md4>
                                         <v-text-field
                                             label='API Key'
-                                            v-model='map.options.apiKey'
+                                            v-model='provider.apiKey'
                                             hide-details
                                             clearable
                                             required
@@ -41,35 +38,51 @@
                         </v-form>
                     </v-card>
                     <v-container class="text-xs-center">
-                        <v-btn @click="showMap = true" v-ripple
-                            color="green" :disabled="!formIsValid"
+                        <v-btn
+                            @click="handleGenerateMap"
+                            v-ripple
+                            color="green"
+                            :disabled="!formIsValid"
                         >Generate Map</v-btn>
-                        <v-btn @click="showMap = false" v-ripple 
-                            color="red" :disabled="!map.show"
-                        >Clear Map</v-btn>
                     </v-container>
                 </v-flex>
             </v-layout>
         </v-container>
-        <generate-map v-if="map.show" 
-            :map-options='map.options' :key='map.key'
-        ></generate-map>
+        <leaflet-map
+            v-for="(location, index) in locations"
+            :key="index"
+            :latitude="location.lat"
+            :longitude="location.lon"
+        >
+            <template slot="title">Click Marker For More Info</template>
+            <v-btn slot="close-button" icon>
+                <v-icon color="red">cancel_presentation</v-icon>
+            </v-btn>
+        </leaflet-map>
     </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     components: {
         ToggleCurrentIp: () => import('./ToggleCurrentIp.vue'),
         ProviderSelect: () => import('./ProviderSelect.vue'),
-        GenerateMap: () => import('./GenerateMap.vue'),
+        LeafletMap: () => import('./LeafletMap.vue'),
     },
     data() {
         return {
+            // location: { lat: [mandatory][string|number], lon: [mandatory][string/number], popUpData: string, isPopUpJson: boolean }
+            locations: [{
+                lat: "29.7545",
+                lon: "-95.4093",
+            }],
             formIsValid: false,
             hostIpShow: false,
             apiKeyShow: false,
             toggleIsChecked: false,
+            host: null,
             rules: {
                 requiredField: [(v) => !!v || "This field is required!"],
                 requiredFieldWithToggle: [
@@ -79,25 +92,20 @@ export default {
                     }
                 ],
             },
-            map: {
-                show: false,
-                key: Date.now(),
-                options: {
-                    provider: null,
-                    host: null,
-                    apiKey: null,
-                },
+            provider: {
+                currentlySelected: null,
+                apiKey: null,
             },
         }
     },
     computed: {
         selectedProvider: {
             get() {
-                return this.map.options.provider;
+                return this.provider.currentlySelected;
             },
             set(provider) {
                 if (provider !== '' && provider !== undefined) {
-                    this.map.options.provider = provider;
+                    this.provider.currentlySelected = provider;
                     this.apiKeyShow = provider.isKeyRequired;
                     this.hostIpShow = true;
                 } else {
@@ -112,28 +120,51 @@ export default {
             set(value) {
                 this.toggleIsChecked = value;
                 if (value) {
-                    if (this.map.options.host !== '') this.map.options.host = '';
+                    if (this.host !== '') this.host = '';
                     this.$refs.host_ip_field.reset();
                 }
             }
         },
-        showMap: {
-            get() {
-                return this.map.show;
-            },
-            set(value) {
-                this.map.show = value;
-                this.map.show && value 
-                    ? this.map.key = Date.now() 
-                    : this.map.show = false;
-            }
-        }
     },
     methods: {
+        handleGenerateMap(){
+            return null;
+        },
         resetForm() {
             this.map.options.host = this.map.options.apiKey = '';
             this.$refs.form.reset();
         },
+        getIpApiData(provider) {
+            switch (data.provider.name) {
+                case "http://ip-api.com":
+                    { // No API key required here, but lets verify
+                        if (data.provider.isKeyRequired === false) {
+                            let h = data.host === undefined ? '' : `/${data.host}`;
+                            let u = `http://ip-api.com/json${String(h)}`;
+                            axios.get(u).then((res) => {
+                                this.buildMap(res, res.data.query, res.data.lat, res.data.lon);
+                            }).catch((err) => {
+                                this.handleAxiosError(u, err);
+                            });
+                        }
+                        break;
+                    }
+
+                case "http://ipstack.com":
+                    { // API key is required here, lets verify
+                        if (data.provider.isKeyRequired === true) {
+                            let h = data.host === undefined ? 'check' : data.host;
+                            let u = `http://api.ipstack.com/${String(h)}?access_key=${String(data.apiKey)}`;
+                            axios.get(u).then((res) => {
+                                this.buildMap(res, res.data.ip, res.data.latitude, res.data.longitude);
+                            }).catch((err) => {
+                                this.handleAxiosError(u, err);
+                            });
+                        }
+                        break;
+                    }
+            }
+        }
     },
 }
 </script>
