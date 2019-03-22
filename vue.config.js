@@ -26,6 +26,7 @@ module.exports = {
 
   pwa: {
     name: 'IPVue',
-    msTileColor: '#4A90E2'
+    msTileColor: '#4DBA87',
+    appleMobileWebAppStatusBarStyle: 'black-translucent'
   }
 }

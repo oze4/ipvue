@@ -126,6 +126,12 @@ export default {
             }
         },
     },
+    watch: {
+        toggleChecked() {
+            if (this.map.options.host !== '') this.map.options.host = '';
+            this.$refs.host_ip_field.reset();
+        },
+    },
     methods: {
         handleGenerateMap(){
             return null;
