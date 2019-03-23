@@ -1,7 +1,11 @@
 <template>
     <v-app>
         <v-content :style="{ height: content.calculatedHeight + 'px' }">
-            <snackbar v-model='isSnackbarShown'></snackbar>
+            <snackbar 
+                v-model='isSnackbarShown'
+                message="You have been redirected from https to http due to Mixed Content issues"
+
+            ></snackbar>
             <topbar :extension-height="topbarExtension.height"></topbar>
             <map-form></map-form>
         </v-content>
@@ -13,7 +17,6 @@ import * as Cookies from './plugins/cookies.js';
 
 export default {
     components: {
-        Snackbar: () => import('./components/Snackbar.vue'),
         Topbar: () => import('./components/Topbar.vue'),
         MapForm: () => import('./components/MapForm.vue'),
     },

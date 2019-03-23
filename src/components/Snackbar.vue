@@ -1,51 +1,73 @@
 <template>
     <v-snackbar
+        :style="{ width: width + 'px' }"
         v-model='isShown'
-        :color='snackbar.color'
-        :timeout='snackbar.timeout'
+        :color='color'
+        :timeout='timeout'
         vertical
         top
         left
         multi-line
         auto-height
-    >{{ snackbar.message }}
+    >{{ message }}
 
         <v-btn
             :ripple=false
             @click='isShown = false'
             dark
             flat
-        >{{ snackbar.button.message }}</v-btn>
+        >{{ buttonMessage }}</v-btn>
 
-        <v-progress-linear 
-            :active='progress.active' 
-            :value='progress.value' 
-            :color='progress.color'
-        ></v-progress-linear>
+        <v-progress-linear v-if="timeout>0" :active='progress.active' :value='progress.value' :color='progress.color'></v-progress-linear>
     </v-snackbar>
 </template>
 
 <script>
 export default {
+    name: "snackbar",
     props: {
         value: {
             type: Boolean,
             default: false,
-        }
+        },
+        message: {
+            type: String,
+            required: true,
+        },
+        color: {
+            type: String,
+            required: false,
+            default: "info",
+        },
+        timeout: {
+            type: Number,
+            required: false,
+            default: 6000
+        },
+        buttonMessage: {
+            type: String,
+            required: false,
+            default: 'Close',
+        },
+        width: {
+            type: String,
+            required: false,
+            default: '30',
+        },
     },
     data() {
         return {
-            snackbar: {
-                color: 'info',
-                message: "You have been redirected from https to http due to Mixed Content issues",
+            /*snackbar: {
+                color: this.color,
+                message: this.message,
                 multi: true,
                 timeout: 0, // 0 means it will stay until closed
                 button: {
-                    message: 'Close',
+                    message: this.buttonMessage,
                 },
-            },
+            },*/
             progress: {
-                timeout: 6000,
+                timeout: this.timeout,
                 active: true,
                 value: 0,
                 color: 'green',
@@ -74,18 +96,20 @@ export default {
     },
     methods: {
         doProgressBar() {
-            this.progress.value = 99; // ensure our progress bar is 'full'
-            let step = 100, // how often to update progress bar
-                totalTime = this.progress.timeout,
-                chunk = totalTime / step,
-                factor = 100 / chunk;
+            if (this.timeout > 0) {
+                this.progress.value = 99; // ensure our progress bar is 'full'
+                let step = 100, // how often to update progress bar
+                    totalTime = this.progress.timeout,
+                    chunk = totalTime / step,
+                    factor = 100 / chunk;
 
-            this.progress.interval = setInterval(() => {
-                if (this.progress.value <= 0) {
-                    this.isShown = false;
-                }
-                this.progress.value -= factor;
-            }, step);
+                this.progress.interval = setInterval(() => {
+                    if (this.progress.value <= 0) {
+                        this.isShown = false;
+                    }
+                    this.progress.value -= factor;
+                }, step);
+            }
         }
     },
 }

@@ -48,16 +48,29 @@
                 </v-flex>
             </v-layout>
         </v-container>
+        <snackbar
+            v-model="leafletMap.error"
+            :message="leafletMap.errorMessage"
+            :timeout=0
+            color="error"
+        ></snackbar>
         <leaflet-map
             v-for="(location, index) in locations"
-            :key="index"
+            :key="index + new Date().getTime()"
             :latitude="location.lat"
             :longitude="location.lon"
+            :popUpData="location.popUpData"
+            :popUpIsJson="location.isPopUpJson"
         >
             <template slot="title">Click Marker For More Info</template>
-            <v-btn slot="close-button" icon>
-                <v-icon color="red">cancel_presentation</v-icon>
-            </v-btn>
+            <v-tooltip top slot="close-button">
+                <template v-slot:activator="{ on }">
+                    <v-btn icon v-on="on" @click.native="removeMap(index)">
+                        <v-icon large color="red">cancel_presentation</v-icon>
+                    </v-btn>
+                </template>
+                <span>Remove Map</span>
+            </v-tooltip>
         </leaflet-map>
     </div>
 </template>
@@ -74,15 +87,16 @@ export default {
     data() {
         return {
             // location: { lat: [mandatory][string|number], lon: [mandatory][string/number], popUpData: string, isPopUpJson: boolean }
-            locations: [{
-                lat: "29.7545",
-                lon: "-95.4093",
-            }],
+            locations: [],
             formIsValid: false,
             hostIpShow: false,
             apiKeyShow: false,
             toggleIsChecked: false,
             host: null,
+            leafletMap: {
+                error: false,
+                errorMessage: "",
+            },
             rules: {
                 requiredField: [(v) => !!v || "This field is required!"],
                 requiredFieldWithToggle: [
@@ -128,29 +142,38 @@ export default {
     },
     watch: {
         toggleChecked() {
-            if (this.map.options.host !== '') this.map.options.host = '';
+            if (this.host !== '') this.host = '';
             this.$refs.host_ip_field.reset();
         },
     },
     methods: {
-        handleGenerateMap(){
-            return null;
+        removeMap(i) {
+            this.locations.splice(i, 1);
         },
         resetForm() {
-            this.map.options.host = this.map.options.apiKey = '';
+            this.host = this.provider.apiKey = '';
             this.$refs.form.reset();
         },
-        getIpApiData(provider) {
-            switch (data.provider.name) {
+        handleGenerateMap() {
+            const selected = this.provider.currentlySelected;
+            switch (selected.name) {
                 case "http://ip-api.com":
                     { // No API key required here, but lets verify
-                        if (data.provider.isKeyRequired === false) {
-                            let h = data.host === undefined ? '' : `/${data.host}`;
-                            let u = `http://ip-api.com/json${String(h)}`;
+                        if (selected.isKeyRequired === false && !this.apiKeyShow) {
+                            let h = this.host === undefined ? '' : `/${this.host}`;
+                            let u = `http://ip-apii.com/json${String(h)}`;
                             axios.get(u).then((res) => {
-                                this.buildMap(res, res.data.query, res.data.lat, res.data.lon);
+                                let newLocation = {
+                                    lat: res.data.lat,
+                                    lon: res.data.lon,
+                                    popUpData: JSON.stringify(res.data),
+                                    isPopUpJson: true,
+                                };
+                                this.locations.push(newLocation);
                             }).catch((err) => {
-                                this.handleAxiosError(u, err);
+                                this.leafletMap.errorMessage =
+                                    `Something went wrong querying ${u}! ${err}`;
+                                this.leafletMap.error = true;
                             });
                         }
                         break;
@@ -158,13 +181,21 @@ export default {
 
                 case "http://ipstack.com":
                     { // API key is required here, lets verify
-                        if (data.provider.isKeyRequired === true) {
-                            let h = data.host === undefined ? 'check' : data.host;
-                            let u = `http://api.ipstack.com/${String(h)}?access_key=${String(data.apiKey)}`;
+                        if (selected.isKeyRequired === true && this.apiKeyShow) {
+                            let h = this.host === undefined ? 'check' : this.host;
+                            let u = `http://api.ipstack.com/${String(h)}?access_key=${String(this.provider.apiKey)}`;
                             axios.get(u).then((res) => {
-                                this.buildMap(res, res.data.ip, res.data.latitude, res.data.longitude);
+                                let newLocation = {
+                                    lat: res.data.latitude,
+                                    lon: res.data.longitude,
+                                    popUpData: JSON.stringify(res.data),
+                                    isPopUpJson: true,
+                                };
+                                this.locations.push(newLocation);
                             }).catch((err) => {
-                                this.handleAxiosError(u, err);
+                                this.leafletMap.errorMessage =
+                                    `Something went wrong querying ${u}! ${err}`;
+                                this.leafletMap.error = true;
                             });
                         }
                         break;

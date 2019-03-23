@@ -12,7 +12,7 @@
                 md10
                 lg10
             >
-                <v-card elevation="15" class='leaflet-map-container'>
+                <v-card elevation="24" class='leaflet-map-container'>
                     <v-toolbar color="primary lighten-1" dark flat>
                         <v-spacer></v-spacer>
                         <v-toolbar-title>
@@ -50,8 +50,7 @@ export default {
             required: true,
         },
         popUpData: {
-            type: String,
-            default: null,
+            type: [String],
             required: false,
         },
         popUpIsJson: {
@@ -115,14 +114,15 @@ export default {
             if (this.popUpData !== null) {
                 let finalPopUpData;
                 if (this.popUpIsJson) {
-                    let pData = JSON.parse(this.popUpData);
-                    finalPopUpData = `<h3>Host Information:</h3><v-card><pre id='json-pre'>${JSON.stringify(pData, undefined, 2)}</pre></v-card>`
+                    finalPopUpData = `<v-card>
+                    <pre style="overflow-x:auto;overflow-y:auto;">${JSON.stringify(JSON.parse(this.popUpData), undefined, 2)}</pre>
+                    </v-card>`
                 } else {
                     finalPopUpData = this.popUpData
                 }
                 marker.bindPopup(finalPopUpData, {
-                    maxWidth: 200,
-                    maxHeight: 200,
+                    maxWidth: 400,
+                    maxHeight: 150,
                     keepInView: true,
                 }).addTo(this.map);
             } else {
