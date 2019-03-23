@@ -2,7 +2,7 @@
     <div>
         <v-layout row wrap justify-center mb-5>
             <v-flex xs10 sm10 md10 lg10>
-                <v-card elevation="24" class='leaflet-map-container'>
+                <v-card elevation="24" style="overflow-x: auto;">
                     <v-toolbar color="primary lighten-1" dark flat>
                         <v-spacer></v-spacer>
                         <v-toolbar-title>
@@ -121,9 +121,3 @@ export default {
     },
 }
 </script>
-
-<style scoped>
-.leaflet-map-container {
-    overflow-x: auto;
-}
-</style>
