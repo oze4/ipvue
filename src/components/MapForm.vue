@@ -92,7 +92,7 @@ export default {
             hostIpShow: false,
             apiKeyShow: false,
             toggleIsChecked: false,
-            host: null,
+            host: undefined,
             leafletMap: {
                 error: false,
                 errorMessage: "",
@@ -159,9 +159,10 @@ export default {
             switch (selected.name) {
                 case "http://ip-api.com":
                     { // No API key required here, but lets verify
-                        if (selected.isKeyRequired === false && !this.apiKeyShow) {
+                        //if (selected.isKeyRequired === false && !this.apiKeyShow) {
+                        if (!selected.isKeyRequired && !this.apiKeyShow) {
                             let h = this.host === undefined ? '' : `/${this.host}`;
-                            let u = `http://ip-apii.com/json${String(h)}`;
+                            let u = `http://ip-api.com/json${String(h)}`;
                             axios.get(u).then((res) => {
                                 let newLocation = {
                                     lat: res.data.lat,
@@ -181,7 +182,7 @@ export default {
 
                 case "http://ipstack.com":
                     { // API key is required here, lets verify
-                        if (selected.isKeyRequired === true && this.apiKeyShow) {
+                        if (selected.isKeyRequired && this.apiKeyShow) {
                             let h = this.host === undefined ? 'check' : this.host;
                             let u = `http://api.ipstack.com/${String(h)}?access_key=${String(this.provider.apiKey)}`;
                             axios.get(u).then((res) => {
