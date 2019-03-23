@@ -1,17 +1,7 @@
 <template>
     <div>
-        <v-layout
-            row
-            wrap
-            justify-center
-            mb-5
-        >
-            <v-flex
-                xs10
-                sm10
-                md10
-                lg10
-            >
+        <v-layout row wrap justify-center mb-5>
+            <v-flex xs10 sm10 md10 lg10>
                 <v-card elevation="24" class='leaflet-map-container'>
                     <v-toolbar color="primary lighten-1" dark flat>
                         <v-spacer></v-spacer>
