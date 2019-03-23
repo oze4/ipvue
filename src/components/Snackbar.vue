@@ -10,15 +10,18 @@
         multi-line
         auto-height
     >{{ message }}
-
         <v-btn
             :ripple=false
             @click='isShown = false'
             dark
             flat
         >{{ buttonMessage }}</v-btn>
-
-        <v-progress-linear v-if="timeout>0" :active='progress.active' :value='progress.value' :color='progress.color'></v-progress-linear>
+        <v-progress-linear
+            v-if="timeout>0"
+            :active='progress.active'
+            :value='progress.value'
+            :color='progress.color'
+        ></v-progress-linear>
     </v-snackbar>
 </template>
 
@@ -57,15 +60,6 @@ export default {
     },
     data() {
         return {
-            /*snackbar: {
-                color: this.color,
-                message: this.message,
-                multi: true,
-                timeout: 0, // 0 means it will stay until closed
-                button: {
-                    message: this.buttonMessage,
-                },
-            },*/
             progress: {
                 timeout: this.timeout,
                 active: true,

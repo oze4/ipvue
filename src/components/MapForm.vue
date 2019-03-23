@@ -13,6 +13,7 @@
                                     <v-flex v-if="hostIpShow" xs12 md4>
                                         <v-text-field
                                             label='Hostname or IP'
+                                            v-model="host"
                                             hide-details
                                             clearable
                                             required
@@ -48,18 +49,19 @@
             </v-layout>
         </v-container>
         <snackbar
-            v-model="leafletMap.error"
+            v-model="leafletMap.isError"
             :message="leafletMap.errorMessage"
             :timeout=0
             color="error"
         ></snackbar>
         <leaflet-map
             v-for="(location, index) in locations"
-            :key="index + new Date().getTime()"
+            :key="location.key"
             :latitude="location.lat"
             :longitude="location.lon"
             :popUpData="location.popUpData"
             :popUpIsJson="location.isPopUpJson"
+            @error="handleLeafletError"
         >
             <template slot="title">Click Marker For More Info</template>
             <v-tooltip top slot="close-button">
@@ -85,7 +87,15 @@ export default {
     },
     data() {
         return {
-            // location: { lat: [mandatory][string|number], lon: [mandatory][string/number], popUpData: string, isPopUpJson: boolean }
+            /** example of location object *
+             location: { 
+                lat: [string|number], 
+                 lon: [string|number], 
+                 popUpData: string, 
+                 isPopUpJson: boolean,
+                 key: string [must be unique - used for :key],
+             } 
+             */
             locations: [],
             formIsValid: false,
             hostIpShow: false,
@@ -93,7 +103,7 @@ export default {
             toggleIsChecked: false,
             host: null,
             leafletMap: {
-                error: false,
+                isError: false,
                 errorMessage: "",
             },
             rules: {
@@ -153,54 +163,62 @@ export default {
             this.host = this.provider.apiKey = '';
             this.$refs.form.reset();
         },
+        handleLeafletError(e) {
+            this.leafletMap.errorMessage = "Error!! " + e;
+            this.leafletMap.error = true;
+        },
+        newLocationCheck(nl) {
+            if (nl.lat !== undefined && nl.lon !== undefined) {
+                this.locations.push(nl);
+            } else {
+                this.leafletMap.errorMessage = `Invalid Query Error: '${this.host}' is not a valid host!`;
+                this.leafletMap.isError = true;
+            }
+        },
         handleGenerateMap() {
-            this.host = this.$refs.host_ip_field.$el.getElementsByTagName('input')[0].value
             const selected = this.provider.currentlySelected;
             switch (selected.name) {
                 case "http://ip-api.com":
-                    { // No API key required here, but lets verify
-                        //if (selected.isKeyRequired === false && !this.apiKeyShow) {
-                        if (!selected.isKeyRequired && !this.apiKeyShow) {
-                            let h = this.host === null ? '' : `/${this.host}`;
-                            let u = `http://ip-api.com/json${String(h)}`;
-                            axios.get(u).then((res) => {
-                                let newLocation = {
-                                    lat: res.data.lat,
-                                    lon: res.data.lon,
-                                    popUpData: JSON.stringify(res.data),
-                                    isPopUpJson: true,
-                                };
-                                this.locations.push(newLocation);
-                            }).catch((err) => {
-                                this.leafletMap.errorMessage =
-                                    `Something went wrong querying ${u}! ${err}`;
-                                this.leafletMap.error = true;
-                            });
-                        }
-                        break;
+                    if (!selected.isKeyRequired && !this.apiKeyShow) {
+                        let h = this.host === undefined ? '' : `/${this.host}`;
+                        let u = `http://ip-api.com/json${String(h)}`;
+                        axios.get(u).then((res) => {
+                            return {
+                                lat: res.data.lat,
+                                lon: res.data.lon,
+                                popUpData: JSON.stringify(res.data),
+                                isPopUpJson: true,
+                                key: new Date().getTime(),
+                            };
+                        }).catch((err) => {
+                            this.leafletMap.errorMessage = `Something went wrong querying '${u}' ${err}`;
+                            this.leafletMap.isError = true;
+                        }).then(newLocation => {
+                            this.newLocationCheck(newLocation);
+                        });
                     }
+                    break;
 
                 case "http://ipstack.com":
-                    { // API key is required here, lets verify
-                        if (selected.isKeyRequired && this.apiKeyShow) {
-                            let h = this.host === null ? 'check' : this.host;
-                            let u = `http://api.ipstack.com/${String(h)}?access_key=${String(this.provider.apiKey)}`;
-                            axios.get(u).then((res) => {
-                                let newLocation = {
-                                    lat: res.data.latitude,
-                                    lon: res.data.longitude,
-                                    popUpData: JSON.stringify(res.data),
-                                    isPopUpJson: true,
-                                };
-                                this.locations.push(newLocation);
-                            }).catch((err) => {
-                                this.leafletMap.errorMessage =
-                                    `Something went wrong querying ${u}! ${err}`;
-                                this.leafletMap.error = true;
-                            });
-                        }
-                        break;
+                    if (selected.isKeyRequired && this.apiKeyShow) {
+                        let h = this.host === undefined ? 'check' : this.host;
+                        let u = `http://api.ipstack.com/${String(h)}?access_key=${String(this.provider.apiKey)}`;
+                        axios.get(u).then((res) => {
+                            return {
+                                lat: res.data.latitude,
+                                lon: res.data.longitude,
+                                popUpData: JSON.stringify(res.data),
+                                isPopUpJson: true,
+                                key: new Date().getTime(),
+                            };
+                        }).catch((err) => {
+                            this.leafletMap.errorMessage = `Something went wrong querying ${u}! ${err}`;
+                            this.leafletMap.isError = true;
+                        }).then(newLocation => {
+                            this.newLocationCheck(newLocation);
+                        });
                     }
+                    break;
             }
         }
     },
