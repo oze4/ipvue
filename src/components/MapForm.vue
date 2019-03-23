@@ -13,7 +13,6 @@
                                     <v-flex v-if="hostIpShow" xs12 md4>
                                         <v-text-field
                                             label='Hostname or IP'
-                                            v-model='host'
                                             hide-details
                                             clearable
                                             required
@@ -92,7 +91,7 @@ export default {
             hostIpShow: false,
             apiKeyShow: false,
             toggleIsChecked: false,
-            host: undefined,
+            host: null,
             leafletMap: {
                 error: false,
                 errorMessage: "",
@@ -155,13 +154,14 @@ export default {
             this.$refs.form.reset();
         },
         handleGenerateMap() {
+            this.host = this.$refs.host_ip_field.$el.getElementsByTagName('input')[0].value
             const selected = this.provider.currentlySelected;
             switch (selected.name) {
                 case "http://ip-api.com":
                     { // No API key required here, but lets verify
                         //if (selected.isKeyRequired === false && !this.apiKeyShow) {
                         if (!selected.isKeyRequired && !this.apiKeyShow) {
-                            let h = this.host === undefined ? '' : `/${this.host}`;
+                            let h = this.host === null ? '' : `/${this.host}`;
                             let u = `http://ip-api.com/json${String(h)}`;
                             axios.get(u).then((res) => {
                                 let newLocation = {
@@ -183,7 +183,7 @@ export default {
                 case "http://ipstack.com":
                     { // API key is required here, lets verify
                         if (selected.isKeyRequired && this.apiKeyShow) {
-                            let h = this.host === undefined ? 'check' : this.host;
+                            let h = this.host === null ? 'check' : this.host;
                             let u = `http://api.ipstack.com/${String(h)}?access_key=${String(this.provider.apiKey)}`;
                             axios.get(u).then((res) => {
                                 let newLocation = {
