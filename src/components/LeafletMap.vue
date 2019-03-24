@@ -106,7 +106,7 @@ export default {
                         finalPopUpData = this.popUpData
                     }
                     marker.bindPopup(finalPopUpData, {
-                        maxWidth: 400,
+                        maxWidth: 200,
                         maxHeight: 150,
                         keepInView: true,
                     }).addTo(this.map);

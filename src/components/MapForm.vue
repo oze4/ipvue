@@ -179,7 +179,7 @@ export default {
             this.leafletMap.errorMessage = message;
             this.leafletMap.isError = true;
         },
-        handleGenerateMap() {
+        handleGenerateMap(event) {
             if (this.formIsValid) {
                 const selected = this.provider.currentlySelected;
                 switch (selected.name) {
@@ -199,6 +199,7 @@ export default {
                                 this.throwToastError(`Something went wrong querying '${u}' ${err}`, 0);
                             }).then(newLocation => {
                                 this.newLocationCheck(newLocation);
+                                if(event instanceof KeyboardEvent) event.target.blur();
                             });
                         }
                         break;
@@ -219,6 +220,7 @@ export default {
                                 this.throwToastError(`Something went wrong querying '${u}' ${err}`, 0);
                             }).then(newLocation => {
                                 this.newLocationCheck(newLocation);
+                                if(event instanceof KeyboardEvent) event.target.blur();
                             });
                         }
                         break;
