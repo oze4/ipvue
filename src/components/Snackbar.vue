@@ -1,6 +1,5 @@
 <template>
     <v-snackbar
-        :style="{ width: width + 'px' }"
         v-model='isShown'
         :color='color'
         :timeout='timeout'
@@ -51,11 +50,6 @@ export default {
             type: String,
             required: false,
             default: 'Close',
-        },
-        width: {
-            type: String,
-            required: false,
-            default: '30',
         },
     },
     data() {

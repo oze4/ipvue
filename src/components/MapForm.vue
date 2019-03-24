@@ -61,7 +61,7 @@
             :popUpIsJson="location.isPopUpJson"
             @error="handleLeafletError"
         >
-            <template slot="title">Click Marker For More Info</template>
+            <template slot="title" ><small>Click Marker For More Info</small></template>
             <v-tooltip top slot="close-button">
                 <template v-slot:activator="{ on }">
                     <v-btn icon v-on="on" @click.native="removeMap(location)">
