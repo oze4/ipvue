@@ -3,9 +3,9 @@
         <v-layout row wrap justify-center mb-5>
             <v-flex xs10 sm10 md10 lg10>
                 <v-card elevation="24" style="overflow-x:auto;">
-                    <v-toolbar color="primary lighten-1" dark flat>
+                    <v-toolbar color="primary lighten-1" dark flat height="50">
                         <v-spacer></v-spacer>
-                        <v-toolbar-title style="height:50px;">
+                        <v-toolbar-title>
                             <slot name="title" />
                         </v-toolbar-title>
                         <v-spacer></v-spacer>
