@@ -55,8 +55,8 @@
             color="error"
         ></snackbar>
         <leaflet-map
-            v-for="(location, index) in locations"
-            :key="location.key"
+            v-for="(location, index) in locations.slice().reverse()"
+            :key="index + location.key"
             :latitude="location.lat"
             :longitude="location.lon"
             :popUpData="location.popUpData"
@@ -66,7 +66,7 @@
             <template slot="title">Click Marker For More Info</template>
             <v-tooltip top slot="close-button">
                 <template v-slot:activator="{ on }">
-                    <v-btn icon v-on="on" @click.native="removeMap(index)">
+                    <v-btn icon v-on="on" @click.native="removeMap(location)">
                         <v-icon large color="red">cancel_presentation</v-icon>
                     </v-btn>
                 </template>
@@ -156,7 +156,8 @@ export default {
         },
     },
     methods: {
-        removeMap(i) {
+        removeMap(e) {
+            let i = this.locations.indexOf(e);
             this.locations.splice(i, 1);
         },
         resetForm() {
