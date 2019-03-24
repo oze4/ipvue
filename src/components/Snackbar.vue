@@ -61,7 +61,6 @@ export default {
     data() {
         return {
             progress: {
-                timeout: this.timeout,
                 active: true,
                 value: 0,
                 color: 'green',
@@ -91,9 +90,9 @@ export default {
     methods: {
         doProgressBar() {
             if (this.timeout > 0) {
-                this.progress.value = 99; // ensure our progress bar is 'full'
+                this.progress.value = 100; // ensure our progress bar is 'full'
                 let step = 100, // how often to update progress bar
-                    totalTime = this.progress.timeout,
+                    totalTime = this.timeout,
                     chunk = totalTime / step,
                     factor = 100 / chunk;
 
