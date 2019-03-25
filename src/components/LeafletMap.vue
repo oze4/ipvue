@@ -73,7 +73,7 @@ export default {
             if (this.map !== null) {
                 setTimeout((vm) => {
                     vm.map.invalidateSize();
-                }, 200, this);
+                }, 50, this);
             }
         },
         buildMap() {
