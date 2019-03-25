@@ -3,8 +3,7 @@
         <v-content :style="{ height: content.calculatedHeight + 'px' }">
             <snackbar 
                 v-model='isSnackbarShown'
-                message="You have been redirected from https to http due to Mixed Content issues"
-
+                :message='snackbarMessage'
             ></snackbar>
             <topbar :extension-height="topbarExtension.height"></topbar>
             <map-form></map-form>
@@ -47,6 +46,7 @@ export default {
     data() {
         return {
             isSnackbarShown: false,
+            snackbarMessage: "You have been redirected from https to http due to Mixed Content issues",
             content: {
                 calculatedHeight: 0,
             },

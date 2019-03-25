@@ -51,7 +51,12 @@
                 </v-flex>
             </v-layout>
         </v-container>
-        <snackbar v-model="leafletMap.isError" :message="leafletMap.errorMessage" :timeout=leafletMap.timeout color="error"></snackbar>
+        <snackbar 
+            v-model="leafletMap.isError" 
+            :message="leafletMap.errorMessage" 
+            :timeout=leafletMap.timeout 
+            color="error"
+        ></snackbar>
         <leaflet-map
             v-for="(location, index) in locations.slice().reverse()"
             :key="index + location.key"
@@ -61,15 +66,19 @@
             :popUpIsJson="location.isPopUpJson"
             @error="handleLeafletError"
         >
-            <template slot="title" ><small>Click Marker For More Info</small></template>
-            <v-tooltip top slot="close-button">
-                <template v-slot:activator="{ on }">
-                    <v-btn icon v-on="on" @click.native="removeMap(location)">
-                        <v-icon large color="red">cancel_presentation</v-icon>
-                    </v-btn>
-                </template>
-                <span>Remove Map</span>
-            </v-tooltip>
+            <template v-slot:title>
+                <small>Click Marker For More Info</small>
+            </template>
+            <template v-slot:close-button>
+                <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                        <v-btn icon v-on="on" @click.native="removeMap(location)">
+                            <v-icon large color="red">cancel_presentation</v-icon>
+                        </v-btn>
+                    </template>
+                    <span>Remove Map</span>
+                </v-tooltip>
+            </template>
         </leaflet-map>
     </div>
 </template>
@@ -199,7 +208,7 @@ export default {
                                 this.throwToastError(`Something went wrong querying '${u}' ${err}`, 0);
                             }).then(newLocation => {
                                 this.newLocationCheck(newLocation);
-                                if(event instanceof KeyboardEvent) event.target.blur();
+                                if (event instanceof KeyboardEvent) event.target.blur();
                             });
                         }
                         break;
@@ -220,7 +229,7 @@ export default {
                                 this.throwToastError(`Something went wrong querying '${u}' ${err}`, 0);
                             }).then(newLocation => {
                                 this.newLocationCheck(newLocation);
-                                if(event instanceof KeyboardEvent) event.target.blur();
+                                if (event instanceof KeyboardEvent) event.target.blur();
                             });
                         }
                         break;
