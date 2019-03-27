@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "precache-manifest.c96f13740e259e6f8518b563882ae80c.js"
+  "precache-manifest.207bd6a40478c3ebb5911396fac6b092.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "vueip"});

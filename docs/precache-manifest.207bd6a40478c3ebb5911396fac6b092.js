@@ -20,7 +20,7 @@ self.__precacheManifest = [
     "url": "assets/js/chunk-5604a83c.e32a6762.js"
   },
   {
-    "revision": "138983d53964c3e45b3c74aea5792517",
+    "revision": "13d2951033bbfabb196370c53b37b191",
     "url": "index.html"
   },
   {
@@ -28,8 +28,8 @@ self.__precacheManifest = [
     "url": "assets/js/chunk-74983c22.d6823b92.js"
   },
   {
-    "revision": "2b6f5f33c8cea30bd6a5",
-    "url": "assets/js/chunk-vendors.341891f6.js"
+    "revision": "bc2e5bf1496be270f9a9",
+    "url": "assets/js/chunk-vendors.29e71d2f.js"
   },
   {
     "revision": "8539c282b18d820cba93",
@@ -40,8 +40,8 @@ self.__precacheManifest = [
     "url": "assets/js/chunk-e43a9280.ebe78f04.js"
   },
   {
-    "revision": "973375808db0610157c6",
-    "url": "assets/js/app.eb6ea880.js"
+    "revision": "46eb4e301b2979a835a2",
+    "url": "assets/js/app.cbb2013d.js"
   },
   {
     "revision": "cf23526f451784ff137f161b8fe18d5a",
@@ -52,8 +52,8 @@ self.__precacheManifest = [
     "url": "assets/img/ostrike_logo.png"
   },
   {
-    "revision": "2b6f5f33c8cea30bd6a5",
-    "url": "assets/css/chunk-vendors.4dd1a5cf.css"
+    "revision": "bc2e5bf1496be270f9a9",
+    "url": "assets/css/chunk-vendors.ad75575c.css"
   },
   {
     "revision": "579f83320af5019f5447",
