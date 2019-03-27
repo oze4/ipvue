@@ -1,13 +1,6 @@
 <template>
     <div>
-        <v-toolbar
-            color='primary'
-            dark
-            fixed
-            flat
-            app
-            prominent
-        >
+        <v-toolbar color='primary' dark fixed flat app prominent>
             <v-spacer></v-spacer>
             <a :href='logo.url' :rel='logo.rel' target='_blank' style='margin-top:5px;'>
                 <img :src='logo.image' :alt='logo.alt' :style='logo.style'>
