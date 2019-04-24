@@ -25,4 +25,5 @@ module.exports = {
     msTileColor: '#4DBA87',
     appleMobileWebAppStatusBarStyle: 'black-translucent'
   }
+  
 }
