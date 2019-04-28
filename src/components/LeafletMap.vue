@@ -99,9 +99,7 @@ export default {
                 if (this.popUpData !== null) {
                     let finalPopUpData;
                     if (this.popUpIsJson) {
-                        finalPopUpData = `<v-card>
-                    <pre style="overflow-x:auto;overflow-y:auto;">${JSON.stringify(JSON.parse(this.popUpData), undefined, 2)}</pre>
-                    </v-card>`
+                        finalPopUpData = `<v-card><pre style="overflow-x:auto;overflow-y:auto;">${JSON.stringify(JSON.parse(this.popUpData), undefined, 2)}</pre></v-card>`
                     } else {
                         finalPopUpData = this.popUpData
                     }
