@@ -1,12 +1,9 @@
 <template>
     <v-app>
         <v-content :style="{ height: content.calculatedHeight + 'px' }">
-            <snackbar 
-                v-model='isSnackbarShown'
-                :message='snackbarMessage'
-            ></snackbar>
-            <topbar :extension-height="topbarExtension.height"></topbar>
-            <map-form></map-form>
+            <snackbar v-model='isSnackbarShown' :message='snackbarMessage' />
+            <topbar :extension-height="topbarExtension.height" />
+            <map-form />
         </v-content>
     </v-app>
 </template>
